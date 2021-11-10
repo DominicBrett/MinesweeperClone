@@ -40,6 +40,7 @@ namespace MinesweeperClone
             this.lbl_winsCounter = new System.Windows.Forms.Label();
             this.lbl_lossesCounter = new System.Windows.Forms.Label();
             this.btn_reset = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // pnl_playArea
@@ -133,13 +134,27 @@ namespace MinesweeperClone
             // 
             // btn_reset
             // 
+            this.btn_reset.BackColor = System.Drawing.SystemColors.Desktop;
+            this.btn_reset.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btn_reset.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.btn_reset.Location = new System.Drawing.Point(518, 451);
             this.btn_reset.Name = "btn_reset";
             this.btn_reset.Size = new System.Drawing.Size(194, 61);
             this.btn_reset.TabIndex = 10;
             this.btn_reset.Text = "Reset ";
-            this.btn_reset.UseVisualStyleBackColor = true;
+            this.btn_reset.UseVisualStyleBackColor = false;
             this.btn_reset.Click += new System.EventHandler(this.btn_reset_Click);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(581, 173);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(76, 19);
+            this.checkBox1.TabIndex = 11;
+            this.checkBox1.Text = "Flag Cells";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // Form1
             // 
@@ -147,6 +162,7 @@ namespace MinesweeperClone
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(729, 526);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.btn_reset);
             this.Controls.Add(this.lbl_lossesCounter);
             this.Controls.Add(this.lbl_winsCounter);
@@ -178,6 +194,7 @@ namespace MinesweeperClone
         private System.Windows.Forms.Label lbl_winsCounter;
         private System.Windows.Forms.Label lbl_lossesCounter;
         private System.Windows.Forms.Button btn_reset;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

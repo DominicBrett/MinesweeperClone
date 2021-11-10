@@ -23,6 +23,8 @@ namespace MinesweeperClone
 
         public bool IsSurroundingBombsCountVisible { get; set; }
 
+        public bool IsFlagged { get; set; }
+
         private static readonly int MAX_RANDOM_NUMBER = 8;
 
         private static Random random = new Random();

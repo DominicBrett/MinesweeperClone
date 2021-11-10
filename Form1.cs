@@ -23,6 +23,8 @@ namespace MinesweeperClone
         private int TIMER_INTERVAL = 1000;
         private int COUNTER_INCREASE = 1;
         private int COUNTER_BASE = 0;
+
+        private bool isUserFlaggingCell = false;
         public Form1()
         {
             InitializeComponent();
@@ -65,15 +67,14 @@ namespace MinesweeperClone
             {
                 for (int c = 0; c < grid.Columns; c++)
                 {
-                    RenderClearedCell(r,c);
-                    RenderBombDistance(r,c);
+                    RenderTheSurroundingBombCount(r, c);
+                    CheckIfBombHasBeenClearedAndDisable(r,c);
                 }
-
             }
 
         }
 
-        public void RenderClearedCell(int row, int column)
+        public void CheckIfBombHasBeenClearedAndDisable(int row, int column)
         {
             if (grid.GridCellButtons[row, column].HasBeenCleared)
             {
@@ -81,7 +82,7 @@ namespace MinesweeperClone
             }
         }
 
-        public void RenderBombDistance(int row, int column)
+        public void RenderTheSurroundingBombCount(int row, int column)
         {
             if (grid.GridCellButtons[row, column].IsSurroundingBombsCountVisible)
             {
@@ -101,7 +102,7 @@ namespace MinesweeperClone
                         txtColor = Color.Purple;
                         break;
                     case 5:
-                        txtColor = Color.Black;
+                        txtColor = Color.White;
                         break;
                     case 6:
                         txtColor = Color.Pink;
@@ -116,8 +117,8 @@ namespace MinesweeperClone
                         break;
                 }
 
-                grid.GridCellButtons[row, column].ForeColor = txtColor;
                 grid.GridCellButtons[row, column].Text = grid.GridCellButtons[row, column].SurroundingBombsCount.ToString();
+                grid.GridCellButtons[row, column].ForeColor = Color.White;
             }
         }
 
@@ -133,10 +134,62 @@ namespace MinesweeperClone
 
         public void gridCellButton_Click(object? sender, EventArgs e)
         {
-            UpdateClicksCounter(clicksCounter + COUNTER_INCREASE);
 
-            CellButton clickedCellButton = (CellButton) sender;
+            CellButton clickedCellButton = (CellButton)sender;
 
+            if (isUserFlaggingCell)
+            {
+                FlagCell(clickedCellButton);
+            }
+            else
+            {
+                UpdateClicksCounter(clicksCounter + COUNTER_INCREASE);
+                SelectCell(clickedCellButton);
+            }
+            
+        }
+
+        private void FlagCell(CellButton clickCellButton)
+        {
+            clickCellButton.IsFlagged = !clickCellButton.IsFlagged;
+            UpdateCellsVisuallyBasedOnFlaggedStatus();
+
+        }
+
+        private void UpdateCellsVisuallyBasedOnFlaggedStatus()
+        {
+            for (int r = 0; r < grid.Rows; r++)
+            {
+                for (int c = 0; c < grid.Columns; c++)
+                {
+                    UpdateCellVisuallyBasedOnFlaggedStatus(grid.GridCellButtons[r,c]);
+                }
+            }
+        }
+
+        private static void UpdateCellVisuallyBasedOnFlaggedStatus(CellButton cellButton)
+        {
+            if (cellButton.IsFlagged && !cellButton.HasBeenCleared)
+            {
+                cellButton.ForeColor = Color.Red;
+                cellButton.Text = "?";
+            }
+            else
+            {
+                cellButton.ForeColor = Color.Black;
+                if (cellButton.IsSurroundingBombsCountVisible)
+                {
+                    cellButton.Text = cellButton.SurroundingBombsCount.ToString();
+                }
+                else
+                {
+                    cellButton.Text = "";
+                }
+            }
+        }
+
+        private void SelectCell(CellButton clickedCellButton)
+        {
             int clickedCellRow = clickedCellButton.Row;
             int clickedCellColumn = clickedCellButton.Column;
 
@@ -147,15 +200,18 @@ namespace MinesweeperClone
             }
             else
             {
-                grid.FloodBoard(clickedCellRow,clickedCellColumn);
+                grid.FloodBoard(clickedCellRow, clickedCellColumn);
                 grid.cnt = 0;
                 RenderGridButtonUpdates();
                 if (grid.CheckWin())
                 {
                     ResetGameWin();
                 }
+                else
+                {
+                    UpdateCellsVisuallyBasedOnFlaggedStatus();
+                }
             }
-            
         }
 
         public void ResetGameLoss()
@@ -173,13 +229,6 @@ namespace MinesweeperClone
             pnl_playArea.Controls.Clear();
             PopulateGrid();
             secondsCounter = COUNTER_BASE;
-        }
-
-        public void gridCellButton_RightClick(object? sender, EventArgs e)
-        {
-            CellButton clickedCellButton = (CellButton)sender;
-            clickedCellButton.BackColor = Color.Red;
-
         }
         public void GenerateTimer()
         {
@@ -215,6 +264,11 @@ namespace MinesweeperClone
         private void btn_reset_Click(object sender, EventArgs e)
         {
             ResetGameLoss();
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            isUserFlaggingCell = !isUserFlaggingCell;
         }
     }
 }
