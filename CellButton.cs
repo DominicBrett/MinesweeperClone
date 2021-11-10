@@ -15,7 +15,7 @@ namespace MinesweeperClone
 
         public bool HasBeenCleared { get; set; }
     
-        public static int ButtonSize = 40;
+        public static int ButtonSize = 50;
 
         public int NearestBombDistance { get; set; }
 

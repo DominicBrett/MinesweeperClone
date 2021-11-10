@@ -22,14 +22,14 @@ namespace MinesweeperClone
             //FindEachCellsClosestBomb();
             FindEachCellsSurroundingBombCount();
         }
-
+        // Recursive function to clear the board when the user selects a cell without a bomb
         public void FloodBoard(int row, int column)
         {
             if (!IsValid(row, column)) return;
             if (!GridCellButtons[row, column].IsThereABomb && !GridCellButtons[row, column].HasBeenCleared)
             {
-                //If this is the first time entering the recursive function and the user clicked a bomb with just 1 bomb surrounding it
-                if (GridCellButtons[row, column].SurroundingBombsCount == 1 && cnt == 0)
+                //If this is the first time entering the recursive function and the user clicked a cell with bombs surrounding it
+                if (GridCellButtons[row, column].SurroundingBombsCount > 0 && cnt == 0)
                 {
                     GridCellButtons[row, column].IsSurroundingBombsCountVisible = false;
                     GridCellButtons[row, column].HasBeenCleared = true;
@@ -37,10 +37,11 @@ namespace MinesweeperClone
                 }
                 cnt++;
                 Debug.WriteLine(cnt);
-                if (GridCellButtons[row, column].SurroundingBombsCount == 1 && cnt > 0)
+                if (GridCellButtons[row, column].SurroundingBombsCount > 0 && cnt > 0)
                 {
                     //stopping point
                     GridCellButtons[row, column].IsSurroundingBombsCountVisible = true;
+                    GridCellButtons[row, column].HasBeenCleared = true;
                 }
                 else
                 {
@@ -62,11 +63,8 @@ namespace MinesweeperClone
                 //Throw the user off a bit
                 if (GridCellButtons[row, column].SurroundingBombsCount == 0)
                 {
-                    GridCellButtons[row, column].SurroundingBombsCount = 1;
+                    GridCellButtons[row, column].HasBeenCleared = false;
                 }
-
-
-                ;
                 GridCellButtons[row, column].IsSurroundingBombsCountVisible = true;
             }
         }
@@ -125,6 +123,38 @@ namespace MinesweeperClone
             if (IsValid(row, column + 1))
             {
                 if (GridCellButtons[row, column + 1].IsThereABomb)
+                {
+                    adjacentBombCount += 1;
+                }
+            }
+            //Top left
+            if (IsValid(row - 1, column - 1))
+            {
+                if (GridCellButtons[row - 1, column - 1].IsThereABomb)
+                {
+                    adjacentBombCount += 1;
+                }
+            }
+            //Top right
+            if (IsValid(row - 1, column + 1))
+            {
+                if (GridCellButtons[row - 1, column + 1].IsThereABomb)
+                {
+                    adjacentBombCount += 1;
+                }
+            }
+            //Bottom Left
+            if (IsValid(row + 1, column - 1))
+            {
+                if (GridCellButtons[row + 1, column - 1].IsThereABomb)
+                {
+                    adjacentBombCount += 1;
+                }
+            }
+            //Bottom Right
+            if (IsValid(row + 1, column + 1))
+            {
+                if (GridCellButtons[row + 1, column + 1].IsThereABomb)
                 {
                     adjacentBombCount += 1;
                 }

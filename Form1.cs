@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -68,7 +69,7 @@ namespace MinesweeperClone
         {
             if (grid.GridCellButtons[row, column].HasBeenCleared)
             {
-                grid.GridCellButtons[row, column].Text = "~";
+                grid.GridCellButtons[row, column].Enabled = false;
             }
         }
 
@@ -76,6 +77,38 @@ namespace MinesweeperClone
         {
             if (grid.GridCellButtons[row, column].IsSurroundingBombsCountVisible)
             {
+                Color txtColor = Color.White;
+                switch (grid.GridCellButtons[row, column].SurroundingBombsCount)
+                {
+                    case 1:
+                        txtColor = Color.Blue;
+                        break;
+                    case 2:
+                        txtColor = Color.Green;
+                        break;
+                    case 3:
+                        txtColor = Color.Red;
+                        break;
+                    case 4:
+                        txtColor = Color.Purple;
+                        break;
+                    case 5:
+                        txtColor = Color.Black;
+                        break;
+                    case 6:
+                        txtColor = Color.Pink;
+                        break;
+                    case 7:
+                        txtColor = Color.Maroon;
+                        break;
+                    case 8:
+                        txtColor = Color.Turquoise;
+                        break;
+                    default:
+                        break;
+                }
+
+                grid.GridCellButtons[row, column].ForeColor = txtColor;
                 grid.GridCellButtons[row, column].Text = grid.GridCellButtons[row, column].SurroundingBombsCount.ToString();
             }
         }
@@ -100,6 +133,9 @@ namespace MinesweeperClone
             if (grid.GridCellButtons[clickedCellRow, clickedCellColumn].IsThereABomb)
             {
                 MessageBox.Show("You have lost");
+                pnl_playArea.Controls.Clear();
+                PopulateGrid();
+
             }
             else
             {
