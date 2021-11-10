@@ -167,12 +167,13 @@ namespace MinesweeperClone
             }
         }
 
-        private static void UpdateCellVisuallyBasedOnFlaggedStatus(CellButton cellButton)
+        private void UpdateCellVisuallyBasedOnFlaggedStatus(CellButton cellButton)
         {
             if (cellButton.IsFlagged && !cellButton.HasBeenCleared)
             {
                 cellButton.ForeColor = Color.Red;
                 cellButton.Text = "?";
+                PlaySound(@"c:\Windows\Media\Windows Pop-up Blocked.wav");
             }
             else
             {
@@ -196,7 +197,7 @@ namespace MinesweeperClone
             if (grid.GridCellButtons[clickedCellRow, clickedCellColumn].IsThereABomb)
             {
                 ResetGameLoss();
-
+                PlaySound(@"c:\Windows\Media\Windows Critical Stop.wav");
             }
             else
             {
@@ -206,10 +207,12 @@ namespace MinesweeperClone
                 if (grid.CheckWin())
                 {
                     ResetGameWin();
+                    PlaySound(@"c:\Windows\Media\Ring08.wav");
                 }
                 else
                 {
                     UpdateCellsVisuallyBasedOnFlaggedStatus();
+                    PlaySound(@"c:\Windows\Media\Windows Default.wav");
                 }
             }
         }
@@ -269,6 +272,12 @@ namespace MinesweeperClone
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             isUserFlaggingCell = !isUserFlaggingCell;
+        }
+
+        private void PlaySound(string filePath)
+        {
+            System.Media.SoundPlayer player = new System.Media.SoundPlayer(filePath);
+            player.Play();
         }
     }
 }
