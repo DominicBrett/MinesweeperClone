@@ -14,12 +14,20 @@ namespace MinesweeperClone
     public partial class Form1 : Form
     {
         private Grid grid;
-        private GameManager gameManager;
 
+        private int secondsCounter = 0;
+        private int clicksCounter = 0;
+        private int winsCounter = 0;
+        private int lossesCounter = 0;
+
+        private int TIMER_INTERVAL = 1000;
+        private int COUNTER_INCREASE = 1;
+        private int COUNTER_BASE = 0;
         public Form1()
         {
             InitializeComponent();
             PopulateGrid();
+            GenerateTimer();
         }
 
         public void PopulateGrid()
@@ -125,6 +133,8 @@ namespace MinesweeperClone
 
         public void gridCellButton_Click(object? sender, EventArgs e)
         {
+            UpdateClicksCounter(clicksCounter + COUNTER_INCREASE);
+
             CellButton clickedCellButton = (CellButton) sender;
 
             int clickedCellRow = clickedCellButton.Row;
@@ -132,9 +142,7 @@ namespace MinesweeperClone
 
             if (grid.GridCellButtons[clickedCellRow, clickedCellColumn].IsThereABomb)
             {
-                MessageBox.Show("You have lost");
-                pnl_playArea.Controls.Clear();
-                PopulateGrid();
+                ResetGameLoss();
 
             }
             else
@@ -144,10 +152,69 @@ namespace MinesweeperClone
                 RenderGridButtonUpdates();
                 if (grid.CheckWin())
                 {
-                    MessageBox.Show("You Won! Congrats!");
+                    ResetGameWin();
                 }
             }
+            
         }
-       
+
+        public void ResetGameLoss()
+        {
+            pnl_playArea.Controls.Clear();
+            UpdateClicksCounter(COUNTER_BASE);
+            UpdateLossesCounter(lossesCounter + COUNTER_INCREASE);
+            PopulateGrid();
+            secondsCounter = COUNTER_BASE;
+        }
+        public void ResetGameWin()
+        {
+            UpdateClicksCounter(COUNTER_BASE);
+            UpdateWinsCounter(winsCounter + COUNTER_INCREASE);
+            pnl_playArea.Controls.Clear();
+            PopulateGrid();
+            secondsCounter = COUNTER_BASE;
+        }
+
+        public void gridCellButton_RightClick(object? sender, EventArgs e)
+        {
+            CellButton clickedCellButton = (CellButton)sender;
+            clickedCellButton.BackColor = Color.Red;
+
+        }
+        public void GenerateTimer()
+        {
+            Timer timer = new Timer();
+            timer.Interval = (TIMER_INTERVAL);
+            timer.Tick += new EventHandler(Timer_Tick);
+            timer.Start();
+        }
+
+        public void Timer_Tick(object sender, EventArgs e)
+        {
+            secondsCounter += COUNTER_INCREASE;
+            lbl_timerDisplay.Text = secondsCounter.ToString() +" Seconds";
+        }
+
+    
+        private void UpdateClicksCounter(int newValue)
+        {
+            clicksCounter = newValue;
+            lbl_Clicks.Text = clicksCounter.ToString();
+        }
+        private void UpdateWinsCounter(int newValue)
+        {
+            winsCounter = newValue;
+            lbl_winsCounter.Text = winsCounter.ToString();
+        }
+        private void UpdateLossesCounter(int newValue)
+        {
+            lossesCounter = newValue;
+            lbl_lossesCounter.Text = lossesCounter.ToString();
+        }
+
+        private void btn_reset_Click(object sender, EventArgs e)
+        {
+            ResetGameLoss();
+        }
     }
 }

@@ -23,13 +23,16 @@ namespace MinesweeperClone
 
         public bool IsSurroundingBombsCountVisible { get; set; }
 
+        private static readonly int MAX_RANDOM_NUMBER = 8;
+
         private static Random random = new Random();
+
         public CellButton()
         {
             // I think this goes against clean coding standards but will use this time
             Width = Height = ButtonSize;
 
-            int randomNumber = random.Next(1, 8);
+            int randomNumber = random.Next(1, MAX_RANDOM_NUMBER);
             if (randomNumber == 2)
             {
                 IsThereABomb = true;

@@ -31,7 +31,7 @@ namespace MinesweeperClone
                 //If this is the first time entering the recursive function and the user clicked a cell with bombs surrounding it
                 if (GridCellButtons[row, column].SurroundingBombsCount > 0 && cnt == 0)
                 {
-                    GridCellButtons[row, column].IsSurroundingBombsCountVisible = false;
+                    GridCellButtons[row, column].IsSurroundingBombsCountVisible = true;
                     GridCellButtons[row, column].HasBeenCleared = true;
                     return;
                 }
