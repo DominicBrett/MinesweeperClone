@@ -15,14 +15,30 @@ namespace MinesweeperClone
     {
         private Grid grid;
 
+        //Counter Varibles
         private int secondsCounter = 0;
         private int clicksCounter = 0;
         private int winsCounter = 0;
         private int lossesCounter = 0;
 
-        private int TIMER_INTERVAL = 1000;
-        private int COUNTER_INCREASE = 1;
-        private int COUNTER_BASE = 0;
+        //Timer Variables
+        private readonly int TIMER_INTERVAL = ApplicationVariables.GetTimerInterval();
+        private readonly int COUNTER_INCREASE = ApplicationVariables.GetCounterIncrease();
+        private readonly int COUNTER_BASE = ApplicationVariables.GetCounterBase();
+
+        //Color Variables
+        private readonly Color FLAGGED_TEXT_COLOR = ApplicationVariables.GetFlaggedTextColor();
+        private readonly Color DEFAULT_TEXT_COLOR = ApplicationVariables.GetDefaultTextColor();
+
+        //Audio Sound File Variables
+        private readonly string SELECT_SOUND_FILE = ApplicationVariables.GetSelectSoundFile();
+        private readonly string FLAGGED_SOUND_FILE = ApplicationVariables.GetFlaggedSoundFile();
+        private readonly string WIN_SOUND_FILE = ApplicationVariables.GetWinSoundFile();
+        private readonly string LOSS_SOUND_FILE= ApplicationVariables.GetLossSoundFile();
+
+        //Button Variables
+        private static readonly int BUTTON_SIZE = ApplicationVariables.GetButtonSize();
+        private static readonly int MAX_RANDOM_NUMBER_FOR_DIFFICULTY = ApplicationVariables.GetMaxRandomNumberForButtonDifficulty(); //The highest the easier the game
 
         private bool isUserFlaggingCell = false;
         public Form1()
@@ -34,7 +50,7 @@ namespace MinesweeperClone
 
         public void PopulateGrid()
         {
-            grid = new Grid(CalculateAmountOfRowsInGrid(), CalculateAmountColumnsInGrid());
+            grid = new Grid(CalculateAmountOfRowsInGrid(), CalculateAmountColumnsInGrid(), BUTTON_SIZE, MAX_RANDOM_NUMBER_FOR_DIFFICULTY);
             for (int r = 0; r < grid.Rows; r++)
             {
                 for (int c = 0; c < grid.Columns; c++)
@@ -52,13 +68,9 @@ namespace MinesweeperClone
 
             //Add button to panel
             pnl_playArea.Controls.Add(grid.GridCellButtons[row, column]);
-            grid.GridCellButtons[row, column].Location =
-                new Point(row * CellButton.ButtonSize, column * CellButton.ButtonSize);
 
-            //if (grid.GridCellButtons[row, column].IsThereABomb == true)
-            //{
-            // grid.GridCellButtons[row, column].Text = "B";
-            //}
+            grid.GridCellButtons[row, column].Location =
+                new Point(row * BUTTON_SIZE, column * BUTTON_SIZE);
         }
 
         public void RenderGridButtonUpdates()
@@ -67,7 +79,6 @@ namespace MinesweeperClone
             {
                 for (int c = 0; c < grid.Columns; c++)
                 {
-                    RenderTheSurroundingBombCount(r, c);
                     CheckIfBombHasBeenClearedAndDisable(r,c);
                 }
             }
@@ -82,54 +93,14 @@ namespace MinesweeperClone
             }
         }
 
-        public void RenderTheSurroundingBombCount(int row, int column)
-        {
-            if (grid.GridCellButtons[row, column].IsSurroundingBombsCountVisible)
-            {
-                Color txtColor = Color.White;
-                switch (grid.GridCellButtons[row, column].SurroundingBombsCount)
-                {
-                    case 1:
-                        txtColor = Color.Blue;
-                        break;
-                    case 2:
-                        txtColor = Color.Green;
-                        break;
-                    case 3:
-                        txtColor = Color.Red;
-                        break;
-                    case 4:
-                        txtColor = Color.Purple;
-                        break;
-                    case 5:
-                        txtColor = Color.White;
-                        break;
-                    case 6:
-                        txtColor = Color.Pink;
-                        break;
-                    case 7:
-                        txtColor = Color.Maroon;
-                        break;
-                    case 8:
-                        txtColor = Color.Turquoise;
-                        break;
-                    default:
-                        break;
-                }
-
-                grid.GridCellButtons[row, column].Text = grid.GridCellButtons[row, column].SurroundingBombsCount.ToString();
-                grid.GridCellButtons[row, column].ForeColor = Color.White;
-            }
-        }
-
         public int CalculateAmountOfRowsInGrid()
         {
-            return pnl_playArea.Height / CellButton.ButtonSize;
+            return pnl_playArea.Height / BUTTON_SIZE;
         }
 
         public int CalculateAmountColumnsInGrid()
         {
-            return pnl_playArea.Width / CellButton.ButtonSize;
+            return pnl_playArea.Width / BUTTON_SIZE;
         }
 
         public void gridCellButton_Click(object? sender, EventArgs e)
@@ -171,13 +142,13 @@ namespace MinesweeperClone
         {
             if (cellButton.IsFlagged && !cellButton.HasBeenCleared)
             {
-                cellButton.ForeColor = Color.Red;
+                cellButton.ForeColor = FLAGGED_TEXT_COLOR;
                 cellButton.Text = "?";
-                PlaySound(@"c:\Windows\Media\Windows Pop-up Blocked.wav");
+                PlaySound(FLAGGED_SOUND_FILE);
             }
             else
             {
-                cellButton.ForeColor = Color.Black;
+                cellButton.ForeColor = DEFAULT_TEXT_COLOR;
                 if (cellButton.IsSurroundingBombsCountVisible)
                 {
                     cellButton.Text = cellButton.SurroundingBombsCount.ToString();
@@ -197,7 +168,7 @@ namespace MinesweeperClone
             if (grid.GridCellButtons[clickedCellRow, clickedCellColumn].IsThereABomb)
             {
                 ResetGameLoss();
-                PlaySound(@"c:\Windows\Media\Windows Critical Stop.wav");
+                PlaySound(LOSS_SOUND_FILE);
             }
             else
             {
@@ -207,12 +178,12 @@ namespace MinesweeperClone
                 if (grid.CheckWin())
                 {
                     ResetGameWin();
-                    PlaySound(@"c:\Windows\Media\Ring08.wav");
+                    PlaySound(WIN_SOUND_FILE);
                 }
                 else
                 {
                     UpdateCellsVisuallyBasedOnFlaggedStatus();
-                    PlaySound(@"c:\Windows\Media\Windows Default.wav");
+                    PlaySound(SELECT_SOUND_FILE);
                 }
             }
         }

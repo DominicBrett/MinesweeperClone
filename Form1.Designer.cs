@@ -63,7 +63,7 @@ namespace MinesweeperClone
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("MV Boli", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(555, 16);
+            this.label1.Location = new System.Drawing.Point(548, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(134, 25);
             this.label1.TabIndex = 2;
@@ -137,9 +137,9 @@ namespace MinesweeperClone
             this.btn_reset.BackColor = System.Drawing.SystemColors.Desktop;
             this.btn_reset.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btn_reset.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.btn_reset.Location = new System.Drawing.Point(518, 451);
+            this.btn_reset.Location = new System.Drawing.Point(518, 436);
             this.btn_reset.Name = "btn_reset";
-            this.btn_reset.Size = new System.Drawing.Size(194, 61);
+            this.btn_reset.Size = new System.Drawing.Size(194, 76);
             this.btn_reset.TabIndex = 10;
             this.btn_reset.Text = "Reset ";
             this.btn_reset.UseVisualStyleBackColor = false;
@@ -148,7 +148,7 @@ namespace MinesweeperClone
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(581, 173);
+            this.checkBox1.Location = new System.Drawing.Point(577, 173);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(76, 19);
             this.checkBox1.TabIndex = 11;
@@ -161,7 +161,7 @@ namespace MinesweeperClone
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(729, 526);
+            this.ClientSize = new System.Drawing.Size(716, 517);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.btn_reset);
             this.Controls.Add(this.lbl_lossesCounter);

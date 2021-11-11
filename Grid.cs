@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Text;
+using System.Windows.Forms;
 
 namespace MinesweeperClone
 {
@@ -13,12 +14,12 @@ namespace MinesweeperClone
         public int Rows { get; set; }
         public int Columns { get; set; }
         public int cnt = 0;
-        public Grid(int rows, int columns)
+        public Grid(int rows, int columns, int buttonSize, int maxRandomNumber)
         {
             this.Rows = rows;
             this.Columns = columns;
             GridCellButtons = new CellButton[rows, columns];
-            PopulateGridCellButton();
+            PopulateGridCellButton(buttonSize,maxRandomNumber);
             //FindEachCellsClosestBomb();
             FindEachCellsSurroundingBombCount();
         }
@@ -211,14 +212,14 @@ namespace MinesweeperClone
             return false;
         }
 
-        private void PopulateGridCellButton()
+        private void PopulateGridCellButton(int buttonSize, int maxRandomNumber)
         {
             for (int r = 0; r < Rows; r++)
             {
                 for (int c = 0; c < Columns; c++)
                 {
                     //Create Button
-                    GridCellButtons[r, c] = new CellButton();
+                    GridCellButtons[r, c] = new CellButton(buttonSize,maxRandomNumber);
                     GridCellButtons[r, c].Row = r;
                     GridCellButtons[r, c].Column = c;
                 }

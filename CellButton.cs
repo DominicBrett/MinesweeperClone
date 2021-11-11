@@ -14,8 +14,8 @@ namespace MinesweeperClone
         public bool IsThereABomb { get; set; }
 
         public bool HasBeenCleared { get; set; }
-    
-        public static int ButtonSize = 50;
+
+
 
         public int NearestBombDistance { get; set; }
 
@@ -25,16 +25,14 @@ namespace MinesweeperClone
 
         public bool IsFlagged { get; set; }
 
-        private static readonly int MAX_RANDOM_NUMBER = 8;
-
         private static Random random = new Random();
 
-        public CellButton()
+        public CellButton(int buttonSize, int maxRandomNumber)
         {
             // I think this goes against clean coding standards but will use this time
-            Width = Height = ButtonSize;
+            Width = Height = buttonSize;
 
-            int randomNumber = random.Next(1, MAX_RANDOM_NUMBER);
+            int randomNumber = random.Next(1, maxRandomNumber);
             if (randomNumber == 2)
             {
                 IsThereABomb = true;
